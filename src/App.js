@@ -1,25 +1,32 @@
-import { useEffect } from "react";
-import {
-  Routes,
-  Route,
-  useNavigationType,
-  useLocation,
-} from "react-router-dom";
-import Homepage from "./pages/Homepage";
-import Thumbnail from "./pages/Thumbnail";
-import ShoppingCart from "./pages/ShoppingCart";
-import HomePage1 from "./pages/HomePage1";
+import React, { useEffect } from "react";
+import { Routes, Route, useNavigationType, useLocation } from "react-router-dom";
 import SIGNUP from "./pages/SIGNUP";
 import LOGIN from "./pages/LOGIN";
 import Profile from "./pages/Profile";
-import RESUME from "./pages/RESUME";
-import CHECK from "./pages/CHECK";
-import INTERVIEW from "./pages/INTERVIEW";
+import Navbar from "./pages/Navbar";
+import Footer from "./pages/Footer";
+import EditProfile from "./pages/EditProfile";
+import Connections from "./pages/Connections";
+import Jobs from "./pages/Jobs";
+import './App.css';
 
 function App() {
   const action = useNavigationType();
   const location = useLocation();
   const pathname = location.pathname;
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = ''; // Required for showing the confirmation dialog
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   useEffect(() => {
     if (action !== "POP") {
@@ -33,45 +40,30 @@ function App() {
 
     switch (pathname) {
       case "/":
-        title = "";
-        metaDescription = "";
-        break;
-      case "/thumbnail":
-        title = "";
-        metaDescription = "";
-        break;
-      case "/shopping-cart":
-        title = "";
-        metaDescription = "";
-        break;
-      case "/home-page":
-        title = "";
-        metaDescription = "";
+        title = "Login";
+        metaDescription = "Log in to your account.";
         break;
       case "/sign-up":
-        title = "";
-        metaDescription = "";
-        break;
-      case "/login":
-        title = "";
-        metaDescription = "";
+        title = "Sign Up";
+        metaDescription = "Create an account.";
         break;
       case "/profile":
-        title = "";
-        metaDescription = "";
+        title = "Profile";
+        metaDescription = "View your profile.";
         break;
-      case "/resume":
-        title = "";
-        metaDescription = "";
+      case "/editprofile":
+        title = "Edit Profile";
+        metaDescription = "Edit your profile.";
         break;
-      case "/check":
-        title = "";
-        metaDescription = "";
-        break;
-      case "/interview":
-        title = "";
-        metaDescription = "";
-        break;
+      case "/connections":
+        title = "Connections";
+        metaDescription = "Connect with other users.";
+      case "/jobs":
+        title = "Jobs";
+        metaDescription = "Find and apply for jobs.";
+      default:
+        title = "App";
+        metaDescription = "App description.";
     }
 
     if (title) {
@@ -79,9 +71,7 @@ function App() {
     }
 
     if (metaDescription) {
-      const metaDescriptionTag = document.querySelector(
-        'head > meta[name="description"]'
-      );
+      const metaDescriptionTag = document.querySelector('head > meta[name="description"]');
       if (metaDescriptionTag) {
         metaDescriptionTag.content = metaDescription;
       }
@@ -89,18 +79,26 @@ function App() {
   }, [pathname]);
 
   return (
-    <Routes>
-      <Route path="/" element={<Homepage />} />
-      <Route path="/thumbnail" element={<Thumbnail />} />
-      <Route path="/shopping-cart" element={<ShoppingCart />} />
-      <Route path="/home-page" element={<HomePage1 />} />
-      <Route path="/sign-up" element={<SIGNUP />} />
-      <Route path="/login" element={<LOGIN />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/resume" element={<RESUME />} />
-      <Route path="/check" element={<CHECK />} />
-      <Route path="/interview" element={<INTERVIEW />} />
-    </Routes>
+    <div className="app-container">
+    <div className="abc">
+      <Navbar />
+      </div>
+      <div className="content-wrap">
+        <Routes>
+          <Route path="/" element={<LOGIN />} />
+          <Route path="/login" element={<LOGIN />} />
+          <Route path="/sign-up" element={<SIGNUP />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/editprofile" element={<EditProfile />} />
+          <Route path="/connections" element={<Connections />} />
+          <Route path="/jobs" element={<Jobs />} />
+        </Routes>
+        {/* <UserReports/> */}
+        {/* <RecruiterTable/> */}
+      </div>
+      <Footer />
+    </div>
   );
 }
+
 export default App;

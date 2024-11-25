@@ -1,82 +1,123 @@
-import "./Profile.css";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './Profile.css';
+import { logincontext } from "../contexts/Logincontext";
+import { Link } from 'react-router-dom';
+import { useContext } from "react";
 
 const Profile = () => {
+  const [currentuser, , UserloginStatus] = useContext(logincontext);
+  const [profileData, setProfileData] = useState(null);
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:5000/profile', {
+          params: { email: currentuser.email, role: currentuser.role },
+        });
+        setProfileData(response.data.data);
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+      }
+    };
+
+    if (UserloginStatus) {
+      fetchProfileData();
+    }
+  }, [UserloginStatus, currentuser.email]);
+
   return (
-    <div className="profile">
-      <div className="profile-child" />
-      <div className="profile-item" />
-      <div className="profile-inner" />
-      <div className="navbar3">
-        <div className="navbar-child9" />
-        <div className="ai-interviews3">AI INTERVIEWS</div>
-        <div className="login7">Login</div>
-        <div className="products3">Products</div>
-        <div className="solutions3">Solutions</div>
-        <div className="navbar-child10" />
-        <div className="navbar-child11" />
-        <div className="demo3">Demo</div>
-        <img className="navbar-child12" alt="" src="/line-1.svg" />
+    <div className="profile-page">
+      <div className="profile-header">
+        <div className="profile-header-left">
+          <img className="profile-avatar" alt="Profile Avatar" src="/ellipse-25@2x.png" />
+          <Link to="/editprofile">
+            <button className="edit-button">Edit Profile</button>
+          </Link>
+        </div>
+        <div className="profile-details">
+          <h2 className="section-title">Profile Details</h2>
+          {profileData ? (
+            <>
+              <div className="detail-item">
+                <strong>Name:</strong> <span className="detail-value">{profileData.firstname} {profileData.lastname}</span>
+              </div>
+              <div className="detail-item">
+                <strong>Email ID:</strong> <span className="detail-value">{profileData.email}</span>
+              </div>
+            </>
+          ) : (
+            <p>Loading profile data...</p>
+          )}
+        </div>
       </div>
-      <div className="name-department-container">
-        <p className="name1">NAME :</p>
-        <p className="blank-line3">&nbsp;</p>
-        <p className="department">DEPARTMENT :</p>
-        <p className="blank-line4">&nbsp;</p>
-        <p className="dob">DOB :</p>
-        <p className="blank-line5">&nbsp;</p>
-        <p className="leetcode-username">LEETCODE USERNAME :</p>
-        <p className="blank-line6">&nbsp;</p>
-        <p className="codechef-username">CODECHEF USERNAME :</p>
-        <p className="blank-line7">&nbsp;</p>
-        <p className="address">ADDRESS :</p>
-        <p className="blank-line8">&nbsp;</p>
-      </div>
-      <div className="profile-child1" />
-      <div className="profile-child2" />
-      <div className="profile-child3" />
-      <div className="profile-child4" />
-      <img className="ellipse-icon" alt="" src="/ellipse-24.svg" />
-      <div className="profile-child5" />
-      <div className="profile-basic">
-        <img className="profile-basic-child" alt="" src="/ellipse-25@2x.png" />
-        <img className="profile-basic-item" alt="" src="/rectangle-56.svg" />
-        <div className="edit">edit</div>
-        <div className="john-wick">JOHN WICK</div>
-        <div className="johnwickgmailcom">johnwick@gmail.com</div>
-        <div className="div1">+91 9876541235</div>
-      </div>
-      <img className="profile-child6" alt="" src="/arrow-3.svg" />
-      <div className="profile1">Profile</div>
-      <div className="profile-child7" />
-      <div className="edit1">Edit</div>
-      <div className="performance-analysis">performance analysis</div>
-      <div className="no-of-interviews">No. of Interviews attended - 10</div>
-      <div className="recent">RECENT</div>
-      <div className="recent1">
-        <div className="recent-child" />
-        <div className="recent-item" />
-        <div className="recent-inner" />
-        <div className="recent-child1" />
-        <div className="recent-child2" />
-        <div className="recent-child3" />
-        <div className="recent-child4" />
-        <div className="recent-child5" />
-        <div className="recent-child6" />
-        <div className="recent-child7" />
-        <div className="recent-child8" />
-        <div className="recent-child9" />
-        <div className="recent-child10" />
-        <div className="recent-child11" />
-        <div className="see-more">see more</div>
-        <div className="summary">summary</div>
-        <div className="summary1">summary</div>
-        <div className="summary2">summary</div>
-        <div className="summary3">summary</div>
-        <div className="interview-1">INTERVIEW - 1</div>
-        <div className="interview-4">INTERVIEW - 4</div>
-        <div className="interview-3">INTERVIEW - 3</div>
-        <div className="interview-2">INTERVIEW - 2</div>
-      </div>
+
+      {profileData && (
+        <div className="profile-main">
+          {/* Performance Analysis Section */}
+          <div className="profile-performance">
+            <h2 className="section-title">Performance Analysis</h2>
+            <div className="performance-stats">
+              <div className="stat-item">
+                <p>Connections</p>
+                <h3>1716</h3>
+              </div>
+              <div className="stat-item">
+                <p>New Suggestions</p>
+                <h3>12</h3>
+              </div>
+              <div className="stat-item">
+                <p>No of jobs applied</p>
+                <h3>45</h3>
+              </div>
+              <div className="stat-item">
+                <p>No of offers received</p>
+                <h3>3</h3>
+              </div>
+            </div>
+            <div className="performance-graph">
+              {/* Placeholder for performance graph */}
+              <p>Graph Placeholder</p>
+            </div>
+          </div>
+
+          {/* Education Section */}
+          <div className="profile-section">
+            <h2 className="section-title">Education</h2>
+            {profileData.education.map((edu, index) => (
+              <div key={index} className="detail-item">
+                <strong>{edu.degree}</strong>, {edu.institution} ({edu.graduatedyear})
+              </div>
+            ))}
+          </div>
+
+          {/* Work Experience Section */}
+          <div className="profile-section">
+            <h2 className="section-title">Work Experience</h2>
+            {profileData.companies.map((company, index) => (
+              <div key={index} className="detail-item">
+                <strong>{company.position}</strong> at {company.name} - {company.experience} years
+              </div>
+            ))}
+          </div>
+
+          {/* Skills Section */}
+          <div className="profile-section">
+            <h2 className="section-title">Skills</h2>
+            <div className="detail-item">
+              <span className="detail-value">{profileData.skills.join(', ')}</span>
+            </div>
+          </div>
+
+          {/* Location Section */}
+          <div className="profile-section">
+            <h2 className="section-title">Location</h2>
+            <div className="detail-item">
+              <span className="detail-value">{profileData.location.address}</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
