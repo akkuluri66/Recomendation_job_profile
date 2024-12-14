@@ -17,32 +17,33 @@ const Navbar = () => {
         <div className="navbar-links">
           {UserloginStatus ? (
             <>
-              <Link to="/profile" className="navbar-link">Profile</Link>
-              <Link to="/connections" className="navbar-link">Connections</Link>
-              <Link to="/jobs" className="navbar-link">Jobs</Link>
-
+            {isUser && (
+              <>
+                <Link to="/profile" className="navbar-link">Profile</Link>
+                <Link to="/connections" className="navbar-link">Connections</Link>
+                <Link to="/jobs" className="navbar-link">Jobs</Link>
+              </>
+            )}
               {/* Conditional rendering based on user role */}
               {isAdmin && (
                 <>
-                  <Link to="/userreports" className="navbar-link">User Reports</Link>
+                  {/* <Link to="/userreports" className="navbar-link">User Reports</Link> */}
                   <Link to="/recruiterslist" className="navbar-link">Recruiters List</Link>
                 </>
               )}
 
-              {isRecruiter && (
+              {/* {isRecruiter && (
                 <>
                   <Link to="/userreports" className="navbar-link">User Reports</Link>
                 </>
-              )}
+              )} */}
 
               <Link to="/" onClick={Logoutuser} className="navbar-link">Logout</Link>
             </>
           ) : (
             <>
               <Link to="/login" className="navbar-link">Login</Link>
-              <Link to="/products" className="navbar-link">Products</Link>
-              <Link to="/solutions" className="navbar-link">Solutions</Link>
-              <Link to="/demo" className="navbar-link">Demo</Link>
+              <Link to="/sign-up" className="navbar-link">Sign Up</Link>
             </>
           )}
         </div>

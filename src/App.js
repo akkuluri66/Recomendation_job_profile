@@ -9,6 +9,8 @@ import EditProfile from "./pages/EditProfile";
 import Connections from "./pages/Connections";
 import Jobs from "./pages/Jobs";
 import './App.css';
+import RecruiterTable from "./pages/RecruitersTable";
+import JobForm from "./pages/JobForm";
 
 function App() {
   const action = useNavigationType();
@@ -92,6 +94,8 @@ function App() {
           <Route path="/editprofile" element={<EditProfile />} />
           <Route path="/connections" element={<Connections />} />
           <Route path="/jobs" element={<Jobs />} />
+          <Route path="/recruiterslist" element={<RecruiterTable/>} />
+          <Route path="/jobform" element={<JobForm />} />
         </Routes>
         {/* <UserReports/> */}
         {/* <RecruiterTable/> */}
